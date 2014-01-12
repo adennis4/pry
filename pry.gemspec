@@ -21,10 +21,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'slop',          '~> 3.4'
   s.add_dependency 'method_source', '~> 0.8'
 
-  s.add_development_dependency 'bacon', '~> 1.2'
   s.add_development_dependency 'open4', '~> 1.3'
   s.add_development_dependency 'rake',  '>= 0.9'
   s.add_development_dependency 'mocha', '~> 0.13.1'
+  s.add_development_dependency 'minitest', '~> 5.0'
+  s.add_development_dependency 'minitest-bacon'
   s.add_development_dependency 'simplecov'
   # TODO: make this a plain dependency:
   s.add_development_dependency 'bond',  '~> 0.5.0'

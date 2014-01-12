@@ -11,13 +11,27 @@ end
 require 'mocha/api'
 
 require 'pry/test/helper'
-require 'spec_helpers/bacon'
+require 'minitest/autorun'
+require 'minitest/spec'
+require 'minitest/bacon'
+require 'minitest/pride'
+
 require 'spec_helpers/mock_pry'
 require 'spec_helpers/repl_tester'
 
 class Module
   public :remove_const
   public :remove_method
+end
+
+class Minitest::Spec
+  extend  PryTestHelpers
+  include PryTestHelpers
+
+  def setup
+    Pry.toplevel_binding = nil
+    super
+  end
 end
 
 # turn warnings off (esp for Pry::Hooks which will generate warnings

@@ -324,12 +324,12 @@ if !PryTestHelpers.mri18_and_no_real_source_location?
             end
           end
 
-          ShowSourceTestClassWeirdSyntax = Class.new do
+          ::ShowSourceTestClassWeirdSyntax = Class.new do
             def beta
             end
           end
 
-          ShowSourceTestModuleWeirdSyntax = Module.new do
+          ::ShowSourceTestModuleWeirdSyntax = Module.new do
             def beta
             end
           end
@@ -382,38 +382,39 @@ if !PryTestHelpers.mri18_and_no_real_source_location?
         end
 
         if !Pry::Helpers::BaseHelpers.mri_18?
-          before do
-            pry_eval unindent(<<-EOS)
-            class Dog
-              def woof
+          describe 'REPL-defined classes' do
+            before do
+              pry_eval unindent(<<-EOS)
+              class Dog
+                def woof
+                end
               end
-            end
 
-            class TobinaMyDog < Dog
-              def woof
+              class TobinaMyDog < Dog
+                def woof
+                end
               end
-            end
-            EOS
-          end
-
-          after do
-            Object.remove_const :Dog
-            Object.remove_const :TobinaMyDog
-          end
-
-          describe "in REPL" do
-            it 'should find class defined in repl' do
-              pry_eval('show-source TobinaMyDog').should =~ /class TobinaMyDog/
+              EOS
             end
 
-            it 'should find superclass defined in repl' do
-              pry_eval('show-source -s TobinaMyDog').should =~ /class Dog/
+            after do
+              Object.remove_const :Dog
+              Object.remove_const :TobinaMyDog
+            end
+
+            describe "in REPL" do
+              it 'should find class defined in repl' do
+                pry_eval('show-source TobinaMyDog').should =~ /class TobinaMyDog/
+              end
+
+              it 'should find superclass defined in repl' do
+                pry_eval('show-source -s TobinaMyDog').should =~ /class Dog/
+              end
             end
           end
         end
 
         it 'should lookup module name with respect to current context' do
-
           constant_scope(:AlphaClass, :BetaClass) do
             class BetaClass
               def alpha

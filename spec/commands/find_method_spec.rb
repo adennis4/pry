@@ -6,22 +6,28 @@ require 'helper'
 # the test, causing a failure. We should fix this in the future by
 # blacklisting certain methods for 1.8 MRI (such as exit, fork, and so on)
 unless Pry::Helpers::BaseHelpers.mri_18?
-  MyKlass = Class.new do
-    def hello
-      "timothy"
-    end
-    def goodbye
-      "jenny"
-    end
-    def tea_tim?
-      "timothy"
-    end
-    def tea_time?
-      "polly"
-    end
-  end
-
   describe "find-method" do
+    before do
+      class MyKlass
+        def hello
+          "timothy"
+        end
+        def goodbye
+          "jenny"
+        end
+        def tea_tim?
+          "timothy"
+        end
+        def tea_time?
+          "polly"
+        end
+      end
+    end
+
+    after do
+      Object.remove_const :MyKlass
+    end
+
     describe "find matching methods by name regex (-n option)" do
       it "should find a method by regex" do
         pry_eval("find-method hell MyKlass").should =~
@@ -65,6 +71,4 @@ unless Pry::Helpers::BaseHelpers.mri_18?
       pry_eval('find-method tea_time\? MyKlass').should =~ good
     end
   end
-
-  Object.remove_const(:MyKlass)
 end
